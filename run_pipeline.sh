@@ -148,10 +148,10 @@ run_ui() {
     # Create venv if needed
     if [ ! -d "venv" ]; then
         echo "📦 Création de l'environnement virtuel..."
-        python3 -m venv venv
+        python -m venv venv
     fi
     
-    source venv/bin/activate
+    source venv/Scripts/activate
     
     echo "📦 Installation des dépendances..."
     pip install -q -r requirements.txt

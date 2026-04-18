@@ -27,23 +27,23 @@ API_URL = "http://localhost:8000"
 
 # Classes et couleurs
 CLASS_COLORS = {
-    "Gun": "#FF0000",           # Rouge
-    "Knife": "#FF3232",         # Rouge clair
-    "Bullet": "#FF6400",        # Orange
-    "Razor_blade": "#FF9600",   # Orange clair
-    "Scissors": "#00FF00",      # Vert
-    "Lighter": "#00C8FF",       # Cyan
-    "Pressure_vessel": "#FFFF00", # Jaune
-    "Wrench": "#969696",        # Gris
-    "Pliers": "#6464FF",        # Bleu clair
-    "Hammer": "#C86432",        # Marron
-    "Screwdriver": "#32C832",   # Vert clair
-    "Battery": "#FFC800",       # Or
-    "Bat": "#9632C8",           # Violet
-    "Saw_blade": "#C83264",     # Rose
-    "Fireworks": "#FF64FF",     # Magenta
-    "Dart": "#64FFC8",          # Turquoise
-    "Shuriken": "#C8C800",      # Jaune-vert
+    "Gun": "",           # Rouge
+    "Knife": "",         # Rouge clair
+    "Bullet": "#FF0000",        # Orange
+    "Razor_blade": "#FF0000",   # Orange clair
+    "Scissors": "#FF0000",      # Vert
+    "Lighter": "#FF0000",       # Cyan
+    "Pressure_vessel": "#FF0000", # Jaune
+    "Wrench": "#FF0000",        # Gris
+    "Pliers": "#FF0000",        # Bleu clair
+    "Hammer": "#FF0000",        # Marron
+    "Screwdriver": "#FF0000",   # Vert clair
+    "Battery": "#FF0000",       # Or
+    "Bat": "#FF0000",           # Violet
+    "Saw_blade": "#FF0000",     # Rose
+    "Fireworks": "#FF0000",     # Magenta
+    "Dart": "#FF0000",          # Turquoise
+    "Shuriken": "#FF0000",      # Jaune-vert
 }
 
 DANGEROUS_CLASSES = {"Gun", "Knife", "Bullet", "Razor_blade"}
@@ -140,12 +140,9 @@ def main():
         st.header("📋 Classes (17)")
         
         # Show class legend
-        for class_name, color in CLASS_COLORS.items():
+        for class_name in CLASS_COLORS:
             danger_icon = "🔴" if class_name in DANGEROUS_CLASSES else "🟢"
-            st.markdown(
-                f'<span style="color:{color}">■</span> {danger_icon} {class_name}',
-                unsafe_allow_html=True
-            )
+            st.markdown(f"{danger_icon} {class_name}")
     
     # Main content
     if not api_ok:

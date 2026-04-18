@@ -13,6 +13,7 @@ data/
 preprocessing-scala/project/
 preprocessing-scala/target/
 plots/
+.metals
 
 training-python/models
 training-python/models_fine_tuned
