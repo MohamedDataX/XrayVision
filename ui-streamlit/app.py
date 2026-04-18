@@ -27,7 +27,7 @@ API_URL = "http://localhost:8000"
 
 # Classes et couleurs
 CLASS_COLORS = {
-    "Gun": "#FF0000",           # Rouge
+    "Gun": "",           # Rouge
     "Knife": "#FF3232",         # Rouge clair
     "Bullet": "#FF6400",        # Orange
     "Razor_blade": "#FF9600",   # Orange clair
@@ -121,7 +121,7 @@ def draw_detections(image: Image.Image, detections: list) -> Image.Image:
 # ============================================================================
 def main():
     # Header
-    st.title("🔍 XrayVision")
+    st.title("XrayVision")
     st.markdown("**Détection d'objets dangereux dans les images X-ray**")
     st.markdown("---")
     
@@ -143,7 +143,7 @@ def main():
         for class_name, color in CLASS_COLORS.items():
             danger_icon = "🔴" if class_name in DANGEROUS_CLASSES else "🟢"
             st.markdown(
-                f'<span style="color:{color}">■</span> {danger_icon} {class_name}',
+                f'<span style="color:{color}"></span> {danger_icon} {class_name}',
                 unsafe_allow_html=True
             )
     
