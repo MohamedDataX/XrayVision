@@ -7,7 +7,7 @@ WORKDIR /app
 # copy requirements
 COPY requirements_microservices.txt requirements.txt
 
-# installer les dépendances
+#dependencies installation
 RUN pip install --no-cache-dir -r requirements.txt
 
 #copy the app
