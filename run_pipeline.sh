@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Script pour exécuter le pipeline complet
-# Usage: ./run_pipeline.sh [preprocess|train|api|ui|all]
+# script pour exécuter le pipeline complet
+# usage: ./run_pipeline.sh [preprocess|train|api|ui|all]
 
 set -e
 
@@ -17,59 +17,55 @@ PROJECT_ROOT="$(cd "$(dirname "$0")" && pwd)"
 DATA_RAW="$PROJECT_ROOT/data/RawData"
 DATA_PROCESSED="$PROJECT_ROOT/data/processed"
 
-
-
 # functions
 
 check_java() {
     if ! command -v java &> /dev/null; then
-        echo -e "${RED}❌ Java non trouvé. Installez Java 11+${NC}"
+        echo -e "${RED}Java non trouvé. Installez Java 11+${NC}"
         exit 1
     fi
-    echo -e "${GREEN}✅ Java trouvé${NC}"
+    echo -e "${GREEN}Java trouvé${NC}"
 }
 
 check_sbt() {
     if ! command -v sbt &> /dev/null; then
-        echo -e "${RED}❌ sbt non trouvé. Installez sbt${NC}"
+        echo -e "${RED}sbt non trouvé. Installez sbt${NC}"
         echo "   brew install sbt"
         exit 1
     fi
-    echo -e "${GREEN}✅ sbt trouvé${NC}"
+    echo -e "${GREEN}sbt trouvé${NC}"
 }
 
 check_python() {
     if ! command -v python3 &> /dev/null; then
-        echo -e "${RED}❌ Python3 non trouvé${NC}"
+        echo -e "${RED}Python3 non trouvé${NC}"
         exit 1
     fi
-    echo -e "${GREEN}✅ Python3 trouvé${NC}"
+    echo -e "${GREEN}Python3 trouvé${NC}"
 }
 
 # scala spark
 run_preprocessing() {
-    echo -e "\n${YELLOW}═══ PREPROCESSING (Scala + Spark) ═══${NC}\n"
+    echo -e "\n${YELLOW}=== PREPROCESSING (Scala + Spark) ===${NC}\n"
     
     check_java
     check_sbt
     
     cd "$PROJECT_ROOT/preprocessing-scala"
     
-    echo "📦 Compilation du projet Scala..."
+    echo "Compilation du projet Scala..."
     sbt clean compile
     
-    echo "🚀 Exécution du preprocessing..."
+    echo "Execution du preprocessing..."
     sbt "run $DATA_RAW $DATA_PROCESSED"
     
-    echo -e "\n${GREEN}✅ Preprocessing terminé!${NC}"
-    echo "   Output: $DATA_PROCESSED"
+    echo -e "\n${GREEN}Preprocessing termine${NC}"
+    echo "Output: $DATA_PROCESSED"
 }
 
-# =============================================================================
 # TRAINING (Python + PyTorch)
-# =============================================================================
 run_training() {
-    echo -e "\n${YELLOW}═══ TRAINING (Python + PyTorch) ═══${NC}\n"
+    echo -e "\n${YELLOW}=== TRAINING (Python + PyTorch) ===${NC}\n"
     
     check_python
     
@@ -77,16 +73,16 @@ run_training() {
     
     # Create venv if needed
     if [ ! -d "venv" ]; then
-        echo "Création de l'environnement virtuel..."
+        echo "Creation de l'environnement virtuel..."
         python3 -m venv venv
     fi
     
     source venv/bin/activate
     
-    echo "📦 Installation des dépendances..."
+    echo "Installation des dependances..."
     pip install -q -r requirements.txt
     
-    echo "lancement de l'entraînement..."
+    echo "Lancement de l'entrainement..."
     python src/train.py \
         --data-root "$DATA_PROCESSED" \
         --output-dir "./models" \
@@ -95,15 +91,13 @@ run_training() {
     
     deactivate
     
-    echo -e "\n${GREEN} Training terminé!${NC}"
-    echo "   Modèle: $PROJECT_ROOT/training-python/models/best_model.pt"
+    echo -e "\n${GREEN}Training termine${NC}"
+    echo "Modele: $PROJECT_ROOT/training-python/models/best_model.pt"
 }
 
-
 # inference API (FastAPI)
-
 run_api() {
-    echo -e "\n${YELLOW}═══ INFERENCE API (FastAPI) ═══${NC}\n"
+    echo -e "\n${YELLOW}=== INFERENCE API (FastAPI) ===${NC}\n"
     
     check_python
     
@@ -111,13 +105,13 @@ run_api() {
     
     # Create venv if needed
     if [ ! -d "venv" ]; then
-        echo "📦 Création de l'environnement virtuel..."
+        echo "Creation de l'environnement virtuel..."
         python3 -m venv venv
     fi
     
     source venv/bin/activate
     
-    echo "📦 Installation des dépendances..."
+    echo "Installation des dependances..."
     pip install -q -r requirements.txt
     
     # Copy model if exists
@@ -125,21 +119,21 @@ run_api() {
     MODEL_DST="$PROJECT_ROOT/inference-api/models/best_model.pt"
     
     if [ -f "$MODEL_SRC" ]; then
-        echo "📋 Copie du modèle..."
+        echo "Copie du modele..."
         mkdir -p "$(dirname "$MODEL_DST")"
         cp "$MODEL_SRC" "$MODEL_DST"
     fi
     
-    echo "🚀 Démarrage de l'API..."
-    echo -e "${BLUE}   URL: http://localhost:8000${NC}"
-    echo -e "${BLUE}   Docs: http://localhost:8000/docs${NC}"
+    echo "Demarrage de l'API..."
+    echo -e "${BLUE}URL: http://localhost:8000${NC}"
+    echo -e "${BLUE}Docs: http://localhost:8000/docs${NC}"
     
     python3 src/main.py
 }
 
 # ui streamlit
 run_ui() {
-    echo -e "\n${YELLOW}═══ UI (Streamlit) ═══${NC}\n"
+    echo -e "\n${YELLOW}=== UI (Streamlit) ===${NC}\n"
     
     check_python
     
@@ -147,17 +141,17 @@ run_ui() {
     
     # Create venv if needed
     if [ ! -d "venv" ]; then
-        echo "📦 Création de l'environnement virtuel..."
+        echo "Creation de l'environnement virtuel..."
         python3 -m venv venv
     fi
     
     source venv/bin/activate
     
-    echo "📦 Installation des dépendances..."
+    echo "Installation des dependances..."
     pip install -q -r requirements.txt
     
-    echo "🚀 Démarrage de l'UI..."
-    echo -e "${BLUE}   URL: http://localhost:8501${NC}"
+    echo "Demarrage de l'UI..."
+    echo -e "${BLUE}URL: http://localhost:8501${NC}"
     
     streamlit run app.py
 }
@@ -179,20 +173,20 @@ case "$1" in
     all)
         run_preprocessing
         run_training
-        echo -e "\n${GREEN}✅ Pipeline complet terminé!${NC}"
-        echo -e "${YELLOW}Pour démarrer les services:${NC}"
-        echo "   Terminal 1: ./run_pipeline.sh api"
-        echo "   Terminal 2: ./run_pipeline.sh ui"
+        echo -e "\n${GREEN}Pipeline complet termine${NC}"
+        echo -e "${YELLOW}Pour demarrer les services:${NC}"
+        echo "Terminal 1: ./run_pipeline.sh api"
+        echo "Terminal 2: ./run_pipeline.sh ui"
         ;;
     *)
         echo "Usage: $0 {preprocess|train|api|ui|all}"
         echo ""
         echo "Commands:"
-        echo "  preprocess  - Traite les données brutes (Scala + Spark)"
-        echo "  train       - Entraîne le modèle SSD-CNN-256 (Python)"
-        echo "  api         - Démarre l'API FastAPI (port 8000)"
-        echo "  ui          - Démarre l'interface Streamlit (port 8501)"
-        echo "  all         - Exécute preprocess + train"
+        echo "  preprocess  - Traite les donnees brutes (Scala + Spark)"
+        echo "  train       - Entraine le modele SSD-CNN-256 (Python)"
+        echo "  api         - Demarre l'API FastAPI (port 8000)"
+        echo "  ui          - Demarre l'interface Streamlit (port 8501)"
+        echo "  all         - Execute preprocess + train"
         exit 1
         ;;
 esac
