@@ -6,11 +6,17 @@ __pycache__/
 .venv/
 env/
 venv/
-
+data/
 # Conda
 *.conda
 *.env
+preprocessing-scala/project/
+preprocessing-scala/target/
+plots/
 
+training-python/models
+training-python/models_fine_tuned
+training-python/logs
 # Spark
 metastore_db/
 spark-warehouse/
