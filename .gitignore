@@ -34,4 +34,7 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
-RawData/
+RawData/target/
+target/
+*.class
+*.jar
