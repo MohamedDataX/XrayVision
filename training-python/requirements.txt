@@ -1,0 +1,14 @@
+# XrayVision Training - Python Dependencies
+# Optimisé pour Mac CPU
+
+# PyTorch CPU
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Image processing
+Pillow>=9.0.0
+numpy>=1.24.0
+
+# Utilities
+tqdm>=4.65.0
+pyyaml>=6.0.0

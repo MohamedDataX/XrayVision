@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+env/
+venv/
+data/
+# Conda
+*.conda
+*.env
+preprocessing-scala/project/
+preprocessing-scala/target/
+plots/
+
+training-python/models
+training-python/models_fine_tuned
+training-python/logs
+# Spark
+metastore_db/
+spark-warehouse/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+RawData/target/
+target/
+*.class
+*.jar
