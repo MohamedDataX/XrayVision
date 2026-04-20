@@ -3,31 +3,24 @@ import scala.util.Random
 import org.apache.spark.sql.SparkSession
 
 /**
- * =============================================================================
- * XRAYVISION - Preprocessing avec Spark
- * =============================================================================
- * 
- * Preprocessing des images X-ray pour détection d'objets (17 classes)
- * - RGB → Grayscale
- * - Resize 256×256
- * - Conservation des bounding boxes (format YOLO)
- * - Split train/val/test
+ * preprocessing des images X-ray pour détection d'objets (17 classes)
+ * RGB -> Grayscale
+ * resize 256×256
+ * conservation des bounding boxes (format YOLO)
+ * split train/val/test
  */
 object PreprocessingMain {
   
   def main(args: Array[String]): Unit = {
-    println("""
-    |╔═══════════════════════════════════════════════════════════════╗
-    |║     XRAYVISION - PREPROCESSING (SPARK)                        ║
-    |║     Object Detection - 17 Classes - Mac CPU                   ║
-    |╚═══════════════════════════════════════════════════════════════╝
+    println("""XRAYVISION
+    PREPROCESSING (SPARK)
     """.stripMargin)
     
     val startTime = System.currentTimeMillis()
     Random.setSeed(Config.RANDOM_SEED)
     
-    // Initialisation Spark
-    println("⚡ Initialisation Apache Spark...")
+    // init Spark
+    println("Initialisation Apache Spark...")
     val spark = SparkSession.builder()
       .appName("XrayVision-Preprocessing")
       .master("local[*]")
@@ -38,17 +31,17 @@ object PreprocessingMain {
     
     val sc = spark.sparkContext
     sc.setLogLevel("WARN")
-    println(s"   ✓ Spark initialisé avec ${sc.defaultParallelism} cœurs")
+    println(s"Spark initialisé avec ${sc.defaultParallelism} cœurs")
     
-    // 1. Scanner les images positives
-    println("\n📂 [1/5] Scan des images positives...")
+    //scanner les images ++
+    println("\n[1/5] Scan des images positives...")
     val positiveSamples = DatasetScanner.scanPositiveSamples(new File(s"${Config.RAW_DATA_PATH}/Positive_Samples"))
     println(s"   ✓ ${positiveSamples.length} échantillons positifs trouvés")
     
-    // 2. Scanner les images négatives
-    println("\n📂 [2/5] Scan des images négatives...")
+    //scanner les images --
+    println("\n[2/5] Scan des images négatives...")
     val negativeSamples = DatasetScanner.scanNegativeSamples(new File(s"${Config.RAW_DATA_PATH}/Negative_Samples"))
-    println(s"   ✓ ${negativeSamples.length} échantillons négatifs trouvés")
+    println(s"${negativeSamples.length} échantillons négatifs trouvés")
     
     if (positiveSamples.isEmpty && negativeSamples.isEmpty) {
       println("❌ Aucune image trouvée!")
@@ -56,12 +49,12 @@ object PreprocessingMain {
       return
     }
     
-    // 3. Créer les dossiers de sortie
-    println("\n📁 [3/5] Création structure de sortie...")
+    //doss de sortie
+    println("\n[3/5] Création structure de sortie...")
     createOutputDirs()
-    
-    // 4. Splitter et traiter les données
-    println("\n🖼️  [4/5] Traitement des images avec Spark (grayscale + 256×256)...")
+
+    //split data
+    println("\n[4/5] Traitement des images avec Spark (grayscale + 256×256)...")
     val allSamples = Random.shuffle(positiveSamples ++ negativeSamples)
     val (trainSamples, valSamples, testSamples) = splitData(allSamples)
     
@@ -69,23 +62,14 @@ object PreprocessingMain {
     SparkProcessing.processAndSave(valSamples, "val", sc)
     SparkProcessing.processAndSave(testSamples, "test", sc)
     
-    // 5. Créer data.yaml
-    println("\n📝 [5/5] Création data.yaml...")
+    //data.yaml
+    println("\n[5/5] Création data.yaml...")
     YamlGenerator.create()
     
     spark.stop()
     
     val elapsed = (System.currentTimeMillis() - startTime) / 1000.0
-    println(s"""
-    |╔═══════════════════════════════════════════════════════════════╗
-    |║  ✅ PREPROCESSING TERMINÉ en ${elapsed}s
-    |╠═══════════════════════════════════════════════════════════════╣
-    |║  Train: ${trainSamples.length} images
-    |║  Val:   ${valSamples.length} images  
-    |║  Test:  ${testSamples.length} images
-    |║  Total: ${allSamples.length} images
-    |╚═══════════════════════════════════════════════════════════════╝
-    """.stripMargin)
+
   }
   
   private def createOutputDirs(): Unit = {
@@ -93,7 +77,7 @@ object PreprocessingMain {
       new File(s"${Config.OUTPUT_PATH}/images/$split").mkdirs()
       new File(s"${Config.OUTPUT_PATH}/labels/$split").mkdirs()
     }
-    println("   ✓ Structure créée")
+    println("Structure créée")
   }
   
   private def splitData(samples: Seq[Sample]): (Seq[Sample], Seq[Sample], Seq[Sample]) = {
