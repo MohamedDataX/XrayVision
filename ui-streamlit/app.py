@@ -116,9 +116,9 @@ def render_legend_item(class_name: str, color: str) -> str:
     """
 
 
-# ============================================================================
+
 # SIDEBAR
-# ============================================================================
+
 with st.sidebar:
     st.markdown("### Status")
     api_ok = check_api_health()
@@ -143,9 +143,9 @@ with st.sidebar:
     st.markdown(legend_html, unsafe_allow_html=True)
 
 
-# ============================================================================
+
 # MAIN CONTENT
-# ============================================================================
+
 st.title("XrayVision")
 st.markdown(
     "<p style='color:#5a6a7a;font-size:0.85rem;margin-top:-0.5rem;'>"
@@ -167,7 +167,7 @@ if not api_ok:
     st.code("cd inference-api/src && python main.py", language="bash")
     st.stop()
 
-# ── Upload ─────────────────────────────────────────────────────────────────
+# upload
 st.markdown("### Upload")
 uploaded_file = st.file_uploader(
     "Image X-ray (PNG / JPG)",
@@ -208,7 +208,7 @@ if uploaded_file is not None:
 
 
 
-            # ── Cartes de détection ───────────────────────────────────────
+            #Cartes de détection
             if detections:
                 st.markdown(
                     f"<p style='font-family:IBM Plex Mono,monospace;font-size:0.72rem;"
@@ -224,7 +224,7 @@ if uploaded_file is not None:
                     unsafe_allow_html=True
                 )
 
-# ── Footer ──────────────────────────────────────────────────────────────────
+# Footer
 st.markdown(
     "<div class='xray-footer'>XrayVision · SSD-CNN-256 · Détection X-ray</div>",
     unsafe_allow_html=True

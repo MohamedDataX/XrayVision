@@ -12,25 +12,26 @@ libraryDependencies ++= Seq(
   // Spark
   "org.apache.spark" %% "spark-core" % sparkVersion,
   "org.apache.spark" %% "spark-sql"  % sparkVersion,
-  //"org.http4s" %% "http4s-blaze-server" % "0.23.23",
+
+  // HTTP
   "org.http4s" %% "http4s-ember-server" % http4sVersion,
 
-  // ONNX Runtime
+  // ONNX
   "com.microsoft.onnxruntime" % "onnxruntime" % "1.17.0",
 
-  // HTTP4s — EmberServer (nouveau, non-déprécié)
+  // HTTP4s
   "org.http4s" %% "http4s-ember-server" % http4sVersion,
   "org.http4s" %% "http4s-circe"        % http4sVersion,
   "org.http4s" %% "http4s-dsl"          % http4sVersion,
 
-  // Circe
+  // JSON
   "io.circe" %% "circe-generic" % circeVersion,
   "io.circe" %% "circe-parser"  % circeVersion,
 
-  // Cats Effect
+  // Effects
   "org.typelevel" %% "cats-effect" % "3.5.0",
 
-  // IP4s (pour Host/Port dans EmberServerBuilder)
+  // Network
   "com.comcast" %% "ip4s-core" % "3.3.0"
 )
 
