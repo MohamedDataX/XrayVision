@@ -8,7 +8,7 @@ object Config {
   val _FINETUNED_MODEL: String = s"${_PROJECT_ROOT}/training-python/models_fine_tuned/best_model.onnx"
   val _LOCAL_MODEL: String = s"${Paths.get("").toAbsolutePath.getParent}/models/best_model.onnx"
 
-  val MODEL_PATH: String = "/Users/mohamedaitsidihou/Desktop/Projects/Xray/XrayVision/training-python/models_fine_tuned/best_model.onnx"
+  val MODEL_PATH: String = "/Users/Desktop/Projects/Xray/XrayVision/training-python/models_fine_tuned/best_model.onnx"
 
   val IMAGE_SIZE: Int = 256
   val NUM_CLASSES: Int = 18 // 17 objets + 1 background (index 0)
