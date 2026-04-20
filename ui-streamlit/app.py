@@ -1,11 +1,3 @@
-"""
-=============================================================================
-XRAYVISION - Streamlit UI  (app.py)
-=============================================================================
-Interface web sobre et professionnelle — détection d'objets X-ray
-Imports le style depuis style_css.py
-"""
-
 import streamlit as st
 from PIL import Image, ImageDraw, ImageFont
 import requests
@@ -13,16 +5,14 @@ import io
 
 from style_css import CSS_STYLE
 
-# ============================================================================
-# CONFIGURATION
-# ============================================================================
+# config
 st.set_page_config(
     page_title="XrayVision",
     page_icon=None,
     layout="centered"
 )
 
-# Injection du CSS global
+# css
 st.markdown(CSS_STYLE, unsafe_allow_html=True)
 
 API_URL = "http://localhost:8000"
@@ -50,9 +40,9 @@ CLASS_COLORS = {
 DANGEROUS_CLASSES = {"Gun", "Knife", "Bullet", "Razor_blade"}
 
 
-# ============================================================================
-# HELPER FUNCTIONS
-# ============================================================================
+
+#funcs
+
 def check_api_health() -> bool:
     try:
         r = requests.get(f"{API_URL}/health", timeout=2)
@@ -126,9 +116,9 @@ def render_legend_item(class_name: str, color: str) -> str:
     """
 
 
-# ============================================================================
+
 # SIDEBAR
-# ============================================================================
+
 with st.sidebar:
     st.markdown("### Status")
     api_ok = check_api_health()
@@ -153,9 +143,9 @@ with st.sidebar:
     st.markdown(legend_html, unsafe_allow_html=True)
 
 
-# ============================================================================
+
 # MAIN CONTENT
-# ============================================================================
+
 st.title("XrayVision")
 st.markdown(
     "<p style='color:#5a6a7a;font-size:0.85rem;margin-top:-0.5rem;'>"
@@ -177,7 +167,7 @@ if not api_ok:
     st.code("cd inference-api/src && python main.py", language="bash")
     st.stop()
 
-# ── Upload ─────────────────────────────────────────────────────────────────
+# upload
 st.markdown("### Upload")
 uploaded_file = st.file_uploader(
     "Image X-ray (PNG / JPG)",
@@ -216,31 +206,9 @@ if uploaded_file is not None:
 
             st.markdown("---")
 
-            # ── Résultat global ───────────────────────────────────────────
-            if result.get("has_dangerous"):
-                items = ", ".join(result["dangerous_items"])
-                st.markdown(
-                    f"<div style='border-left:3px solid #d94f4f;background:rgba(217,79,79,0.08);"
-                    f"padding:0.9rem 1.2rem;border-radius:4px;margin-bottom:1rem;'>"
-                    f"<span style='font-family:IBM Plex Mono,monospace;font-size:0.78rem;"
-                    f"letter-spacing:0.1em;text-transform:uppercase;color:#d94f4f;'>"
-                    f"⚠ ALERTE — Objets dangereux</span><br>"
-                    f"<span style='font-size:0.85rem;color:#f0a0a0;'>{items}</span>"
-                    f"</div>",
-                    unsafe_allow_html=True
-                )
-            else:
-                st.markdown(
-                    "<div style='border-left:3px solid #3ab07a;background:rgba(58,176,122,0.07);"
-                    "padding:0.9rem 1.2rem;border-radius:4px;margin-bottom:1rem;'>"
-                    "<span style='font-family:IBM Plex Mono,monospace;font-size:0.78rem;"
-                    "letter-spacing:0.1em;text-transform:uppercase;color:#3ab07a;'>"
-                    "Aucun objet dangereux détecté</span>"
-                    "</div>",
-                    unsafe_allow_html=True
-                )
 
-            # ── Cartes de détection ───────────────────────────────────────
+
+            #Cartes de détection
             if detections:
                 st.markdown(
                     f"<p style='font-family:IBM Plex Mono,monospace;font-size:0.72rem;"
@@ -256,7 +224,7 @@ if uploaded_file is not None:
                     unsafe_allow_html=True
                 )
 
-# ── Footer ──────────────────────────────────────────────────────────────────
+# Footer
 st.markdown(
     "<div class='xray-footer'>XrayVision · SSD-CNN-256 · Détection X-ray</div>",
     unsafe_allow_html=True
